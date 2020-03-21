@@ -1,0 +1,835 @@
+---
+title: "Attrition Project"
+author: "Joseph AKUM"
+date: "16/03/2020"
+output:
+  word_document: default
+  html_document: default
+---
+
+
+
+Importing the data set to R
+```{r}
+library(readxl)
+Attrition_data <- read_excel("C:/Users/Akum/Desktop/Capstone datasets/IBM attrition rates/WA_Fn-UseC_-HR-Employee-Attrition 2.xls", 
+                             col_types = c("numeric", "text", "text", 
+                                           "numeric", "text", "numeric", "numeric", 
+                                           "text", "numeric", "numeric", "numeric", 
+                                           "text", "numeric", "numeric", "numeric", 
+                                           "text", "numeric", "text", "numeric", 
+                                           "numeric", "text", "numeric", "numeric", 
+                                           "numeric", "numeric", "numeric", 
+                                           "numeric", "numeric", "numeric", 
+                                           "numeric", "numeric", "numeric", 
+                                           "numeric"))
+```
+
+#1. Checking the data set for missing values
+```{r}
+sum(is.na(Attrition_data))
+
+```
+
+#2. Converting all categorical variables in the dataset into factor
+```{r}
+Attrition_data_fac <- as.data.frame(unclass(Attrition_data))
+
+```
+
+
+#3. Checking the structure of our data set
+```{r}
+str(Attrition_data_fac)
+
+```
+
+#4. Editing the content of the Attrition Data type
+```{r}
+
+Attrition1<-ifelse(Attrition_data_fac$Attrition=="Yes","1","0")
+
+Attrition_data_fac$Attrition<-Attrition1
+
+Attrition_data_fac$Attrition<-as.factor(Attrition_data_fac$Attrition)
+```
+
+#5. Editing the content of the OverTime Data type
+```{r}
+Overtime1<-ifelse(Attrition_data_fac$OverTime=="Yes","1","0")
+
+Attrition_data_fac$OverTime<-Overtime1
+
+Attrition_data_fac$OverTime<-as.factor(Attrition_data_fac$OverTime)
+
+```
+
+#6. reordering levels of Business travel
+```{r}
+Attrition_data_fac$BusinessTravel<-factor(Attrition_data_fac$BusinessTravel, levels = c("Non-Travel","Travel_Rarely","Travel_Frequently"))
+
+```
+
+
+#7. Transforming the necessary numeric variables to factor variables
+
+```{r}
+Attrition_data_fac$StockOptionLevel<- as.factor(Attrition_data_fac$StockOptionLevel)
+
+Attrition_data_fac$Education<-as.factor(Attrition_data_fac$Education)
+
+Attrition_data_fac$EnvironmentSatisfaction<-as.factor(Attrition_data_fac$EnvironmentSatisfaction)
+
+Attrition_data_fac$JobInvolvement<-as.factor(Attrition_data_fac$JobInvolvement)
+
+Attrition_data_fac$JobLevel<-as.factor(Attrition_data_fac$JobLevel)
+
+Attrition_data_fac$JobSatisfaction<-as.factor(Attrition_data_fac$JobSatisfaction)
+
+Attrition_data_fac$TrainingTimesLastYear<-as.factor(Attrition_data_fac$TrainingTimesLastYear)
+
+Attrition_data_fac$WorkLifeBalance<-as.factor(Attrition_data_fac$WorkLifeBalance)
+
+Attrition_data_fac$NumCompaniesWorked<-as.factor(Attrition_data_fac$NumCompaniesWorked)
+
+Attrition_data_fac$PerformanceRating<-as.factor(Attrition_data_fac$PerformanceRating)
+
+Attrition_data_fac$RelationshipSatisfaction<-as.factor(Attrition_data_fac$RelationshipSatisfaction)
+
+Attrition_data_fac$StockOptionLevel<-as.factor(Attrition_data_fac$StockOptionLevel)
+
+Attrition_data_fac$WorkLifeBalance<-as.factor(Attrition_data_fac$WorkLifeBalance)
+
+```
+
+
+#8. Checking the updated data structure of our dataset
+```{r}
+str(Attrition_data_fac)
+
+```
+
+#9. An overview or summary of our data set
+```{r}
+summary(Attrition_data_fac)
+
+```
+
+
+#10. A view of a the first six items in the data set
+```{r}
+head(Attrition_data_fac)
+
+```
+
+#Exploratory Analysis
+
+#I. Univarate analysis
+
+#1.  Age
+```{r}
+summary(Attrition_data_fac$Age)
+
+```
+```{r}
+hist(Attrition_data_fac$Age)
+
+```
+
+
+
+#2. Attrition or resignation
+```{r}
+
+summary(Attrition_data_fac$Attrition)
+```
+```{r}
+plot(Attrition_data_fac$Attrition)
+```
+
+
+#3. Business Travel
+```{r}
+summary(Attrition_data_fac$BusinessTravel)
+
+```
+```{r}
+plot(Attrition_data_fac$BusinessTravel)
+
+```
+
+
+
+#4. Daily rate
+```{r}
+summary(Attrition_data_fac$DailyRate)
+
+```
+```{r}
+plot(density(Attrition_data_fac$DailyRate),main="DailyRate")
+
+```
+
+#5. Department
+```{r}
+summary(Attrition_data_fac$Department)
+
+```
+
+```{r}
+plot(Attrition_data_fac$Department)
+
+```
+
+#6. Distance from home
+```{r}
+summary(Attrition_data_fac$DistanceFromHome)
+
+```
+```{r}
+plot(density(Attrition_data_fac$DistanceFromHome), main="Distance_From_Home")
+
+```
+
+#7. Education Level
+```{r}
+summary(Attrition_data_fac$Education)
+
+```
+```{r}
+plot(Attrition_data_fac$Education, main ="Education_Level")
+
+```
+
+#8. Educationfield
+```{r}
+
+summary(Attrition_data_fac$EducationField)
+```
+```{r}
+plot(Attrition_data_fac$EducationField, main = "Education Field")
+
+```
+
+
+#9. Environment Satisfaction Level
+
+```{r}
+summary(Attrition_data_fac$EnvironmentSatisfaction)
+
+```
+```{r}
+plot(Attrition_data_fac$EnvironmentSatisfaction, main="Environment Satisfaction Level")
+
+```
+
+#10. Gender
+```{r}
+summary(Attrition_data_fac$Gender)
+
+```
+```{r}
+
+plot(Attrition_data_fac$Gender, main="Gender")
+
+```
+
+
+#11. Hourly Rate
+```{r}
+summary(Attrition_data_fac$HourlyRate)
+```
+```{r}
+plot(density(Attrition_data_fac$HourlyRate), main = "Hourly_Rate")
+```
+
+#12. Job involvement
+```{r}
+
+summary(Attrition_data_fac$JobInvolvement)
+
+```
+```{r}
+plot(Attrition_data_fac$JobInvolvement, main="Job Involement Level")
+
+```
+
+
+
+#13. Job Level
+```{r}
+summary(Attrition_data_fac$JobLevel)
+
+```
+
+```{r}
+plot(Attrition_data_fac$JobLevel, main="Job Level")
+
+```
+
+
+#14. Job Role
+```{r}
+summary(Attrition_data_fac$JobRole)
+```
+```{r}
+plot(Attrition_data_fac$JobRole, main="Job Role")
+
+```
+
+
+
+#15. Job Satisfaction
+```{r}
+summary(Attrition_data_fac$JobSatisfaction)
+```
+
+```{r}
+plot(Attrition_data_fac$JobSatisfaction, main= "Job Satisfaction")
+```
+
+
+#16. Marital Status
+```{r}
+summary(Attrition_data_fac$MaritalStatus)
+```
+
+```{r}
+plot(Attrition_data_fac$MaritalStatus, main="Marital Status")
+
+```
+
+
+#17. MOnthly Income
+```{r}
+summary(Attrition_data_fac$MonthlyIncome)
+```
+
+
+```{r}
+plot(density(Attrition_data_fac$MonthlyIncome), main = "Monthly_income")
+```
+
+
+
+#18. NUmber of Companies WOrked For
+```{r}
+summary(Attrition_data_fac$NumCompaniesWorked)
+```
+
+```{r}
+plot(Attrition_data_fac$NumCompaniesWorked, main="NUmber of Companies WOrked For")
+```
+
+
+#19. Overtime
+```{r}
+summary(Attrition_data_fac$OverTime)
+
+```
+```{r}
+plot(Attrition_data_fac$OverTime, main="OverTime")
+```
+
+
+#20. Percentage salary hikes
+```{r}
+summary(Attrition_data_fac$PercentSalaryHike)
+```
+
+```{r}
+plot(density(Attrition_data_fac$PercentSalaryHike),main = "Percentage_Salary_Hikes")
+```
+
+#21. Performance Rating
+```{r}
+summary(Attrition_data_fac$PerformanceRating)
+```
+
+```{r}
+plot(Attrition_data_fac$PerformanceRating, main="Performance Rating")
+```
+
+
+#22.Relationship Satisfaction
+```{r}
+summary(Attrition_data_fac$RelationshipSatisfaction)
+```
+
+```{r}
+plot(Attrition_data_fac$RelationshipSatisfaction, main="Relationhsip satisfaction")
+```
+
+#23. Stock Option Level
+```{r}
+summary(Attrition_data_fac$StockOptionLevel)
+```
+
+```{r}
+plot(Attrition_data_fac$StockOptionLevel, main="Stock OPtion Level")
+```
+
+#24. Total Working Years
+```{r}
+summary(Attrition_data_fac$TotalWorkingYears)
+```
+```{r}
+boxplot(Attrition_data_fac$TotalWorkingYears, main="Total Working Years")
+```
+
+
+#25. Training Times Last Year
+```{r}
+summary(Attrition_data_fac$TrainingTimesLastYear)
+```
+
+```{r}
+plot(Attrition_data_fac$TrainingTimesLastYear, main = "Training Times Last Year")
+```
+
+
+
+#26. Work Life Balance
+```{r}
+summary(Attrition_data_fac$WorkLifeBalance)
+```
+
+```{r}
+plot(Attrition_data_fac$WorkLifeBalance, main = "Work Life Balance")
+```
+
+
+
+#28. Years at company
+```{r}
+summary(Attrition_data_fac$YearsAtCompany)
+```
+
+```{r}
+plot(density(Attrition_data_fac$YearsAtCompany), main = "Years At Company")
+```
+
+
+
+#29.Years in Current Role
+```{r}
+summary(Attrition_data_fac$YearsInCurrentRole)
+```
+
+```{r}
+plot(density(Attrition_data_fac$YearsInCurrentRole),main = "Years In Current ROle")
+```
+
+
+#30.Years Since Last Promotion
+```{r}
+summary(Attrition_data_fac$YearsSinceLastPromotion)
+```
+
+```{r}
+plot(density(Attrition_data_fac$YearsSinceLastPromotion),main="Years Since Last Promotion")
+```
+
+
+#31. Years with Current Manager
+
+```{r}
+summary(Attrition_data_fac$YearsWithCurrManager)
+```
+
+```{r}
+plot(density(Attrition_data_fac$YearsWithCurrManager),main = "Years Under Current Manager")
+```
+
+#II. Bi-Variate Analysis
+
+#How each variable relates with the dependent variable
+
+#Creating new variables to ease the analysis
+
+
+
+#Setting age as a categorical variable
+
+```{r}
+CatAge<-cut(Attrition_data_fac$Age, breaks = c(0,20,30,40,50,60), labels = c("20","30","40","50","60"))
+```
+
+
+#Setting monthly income as a categorical variable
+
+```{r}
+CatMonthlyIncome<-cut(Attrition_data_fac$MonthlyIncome, breaks = c(0,2000,4000,6000,8000,10000,12000,14000,16000,18000,20000), labels = c("2000","4000","6000","8000","10000","12000","14000","16000","18000","20000"))
+```
+
+#Setting Percentage Salary hikes as a categorical variable
+
+```{r}
+CatHikes<-cut(Attrition_data_fac$PercentSalaryHike, breaks = c(10,15,20,25), labels = c("10-15","16-20","21-25"))
+
+```
+
+```{r}
+require(gmodels)
+```
+
+
+#1. How does Age impact Attrition
+```{r}
+CrossTable(CatAge,Attrition_data_fac$Attrition)
+```
+
+#2. How does Business Travel Impact Attrition
+```{r}
+CrossTable(Attrition_data_fac$BusinessTravel,Attrition_data_fac$Attrition)
+```
+
+
+#3. How does Monthly Income Level impact Attrition?
+```{r}
+CrossTable(CatMonthlyIncome,Attrition_data_fac$Attrition)
+```
+
+
+#4 How does department impact Attrition?
+
+```{r}
+CrossTable(Attrition_data_fac$Department,Attrition_data_fac$Attrition)
+```
+
+#5 How does distance from work impact Attrition
+
+```{r}
+CrossTable(Attrition_data_fac$DistanceFromHome,Attrition_data_fac$Attrition)
+```
+
+#6 How does Education Level impact attrition?
+
+```{r}
+CrossTable(Attrition_data_fac$Education,Attrition_data_fac$Attrition)
+```
+
+#7. How does education field affect attrition
+
+```{r}
+CrossTable(Attrition_data_fac$EducationField,Attrition_data_fac$Attrition)
+```
+
+#8 How does environment Satisfaction affect Attrition?
+
+```{r}
+CrossTable(Attrition_data_fac$EnvironmentSatisfaction,Attrition_data_fac$Attrition)
+```
+
+
+
+#9 How does gender Affect Attrition?
+```{r}
+CrossTable(Attrition_data_fac$Gender,Attrition_data_fac$Attrition)
+```
+
+
+#10 How does JobInvolvement affect Attrition
+
+```{r}
+CrossTable(Attrition_data_fac$JobInvolvement,Attrition_data_fac$Attrition)
+```
+
+#11 How does Job level impact Attrition?
+
+```{r}
+CrossTable(Attrition_data_fac$JobLevel,Attrition_data_fac$Attrition)
+```
+
+
+#12 How does Percentage Job Role impact Attrition?
+
+```{r}
+CrossTable(Attrition_data_fac$JobRole,Attrition_data_fac$Attrition)
+```
+
+#13 How does Job satisfaction affect Attrition? 
+
+```{r}
+CrossTable(Attrition_data_fac$JobSatisfaction,Attrition_data_fac$Attrition)
+```
+
+#14 How dooes marital status impact Attrition? 
+
+```{r}
+CrossTable(Attrition_data_fac$MaritalStatus,Attrition_data_fac$Attrition)
+```
+
+#15 How does number of companies worked for impact Attrition?
+
+```{r}
+CrossTable(Attrition_data_fac$NumCompaniesWorked,Attrition_data_fac$Attrition)
+```
+
+#16 How overtime impacts Attrition 
+
+```{r}
+CrossTable(Attrition_data_fac$OverTime,Attrition_data_fac$Attrition)
+```
+
+# 17 How does each category of salary hikes impact Attrition?
+
+```{r}
+CrossTable(CatHikes,Attrition_data_fac$Attrition)
+```
+
+
+#18. How does Performance rating impact Attrition?
+
+```{r}
+CrossTable(Attrition_data_fac$PerformanceRating,Attrition_data_fac$Attrition)
+```
+
+#19. How does Relationship satisfactoin impact Attrition?
+
+```{r}
+CrossTable(Attrition_data_fac$RelationshipSatisfaction,Attrition_data_fac$Attrition)
+```
+
+
+
+
+#20 How does stockoption Leve impact Attrition 
+
+```{r}
+CrossTable(Attrition_data_fac$StockOptionLevel,Attrition_data_fac$Attrition)
+```
+
+#21. How does total working years impact Attrition? 
+
+```{r}
+CrossTable(Attrition_data_fac$TotalWorkingYears,Attrition_data_fac$Attrition)
+```
+
+
+#22 How Education impacts attrition
+
+```{r}
+CrossTable(Attrition_data_fac$TrainingTimesLastYear,Attrition_data_fac$Attrition)
+```
+
+#23. How does WorkLife balance affect Attrition
+```{r}
+CrossTable(Attrition_data_fac$WorkLifeBalance,Attrition_data_fac$Attrition)
+```
+
+
+
+
+#24. How does the number of years at the company impact attrition?  
+
+```{r}
+CrossTable(Attrition_data_fac$YearsAtCompany,Attrition_data_fac$Attrition)
+```
+
+#25.  How does the number of years in current role impact attrition?
+
+```{r}
+CrossTable(Attrition_data_fac$YearsInCurrentRole,Attrition_data_fac$Attrition)
+```
+
+#26. How does the number of years since last promotion impact Attrition?
+
+```{r}
+CrossTable(Attrition_data_fac$YearsSinceLastPromotion,Attrition_data_fac$Attrition)
+```
+
+
+#27 How does the number of years with current manager impact Attrition
+
+```{r}
+CrossTable(Attrition_data_fac$YearsWithCurrManager,Attrition_data_fac$Attrition)
+```
+
+#III. Logistic Regressoin Model
+
+#Which variables most significantly impact Attrition?
+
+#1. Partitionning the Data set into a Training (70%) and Test (30%) set to guide the prediction of Attrition
+
+```{r}
+set.seed(1234)
+
+ind <- sample(2, nrow(Attrition_data_fac), replace = T, prob = c(0.7, 0.3))
+
+train <- Attrition_data_fac[ind==1,]
+test <- Attrition_data_fac[ind==2,]
+```
+
+
+#2. Setting up our Logistic Regression Model
+
+```{r}
+mymodel <- glm(Attrition ~ Age+BusinessTravel+DailyRate+Department+DistanceFromHome+Education+EducationField+EnvironmentSatisfaction+Gender+HourlyRate+JobInvolvement+JobLevel+JobRole+JobSatisfaction+MaritalStatus+MonthlyIncome+NumCompaniesWorked+OverTime+PercentSalaryHike+PerformanceRating+RelationshipSatisfaction+StockOptionLevel+TotalWorkingYears+WorkLifeBalance+YearsAtCompany+YearsInCurrentRole+YearsSinceLastPromotion+YearsWithCurrManager, data = train, family = 'binomial')
+summary(mymodel)
+```
+
+#Selecting the most significant variables (with p < 0.05):
+
+#Age(-)
+#Business Travel (+)
+#Distance From Home (+)
+#Environment Satisfaction (-)
+#Job involvement(-)
+#Job Level (-)
+#Job ROle
+#Job Satisfaction (-)
+#Number of companies worked for (+)
+#Relationship satisfaction (-)
+#StockoptionLevel (-)
+#Worklife Balance (-)
+#Years at company (-)
+#Years in current Role (-)
+#Years Since Last promotion (+)
+#Years under current manager (-)
+
+
+#3 While maintaining the more statistically significant variables
+
+```{r}
+mymodel <- glm(Attrition ~ Age+BusinessTravel+DistanceFromHome+EnvironmentSatisfaction+JobInvolvement+JobLevel+JobRole+JobSatisfaction+NumCompaniesWorked+OverTime+RelationshipSatisfaction+StockOptionLevel+WorkLifeBalance+YearsAtCompany+YearsInCurrentRole+YearsSinceLastPromotion+YearsWithCurrManager, data = train, family = 'binomial')
+summary(mymodel)
+```
+#Predictions: Predicting the probability of each eomployee leaving the company
+
+
+
+```{r}
+p1 <- predict (mymodel, train, type = 'response')
+head(p1)
+```
+#Predicting attrition of each employee in the training set
+
+
+```{r}
+head(train)
+```
+
+#Measuring Misclassification Error in the training data
+#1 Setting up a confusion Matrix 
+
+```{r}
+pred1 <- ifelse(p1>0.5, 1, 0)
+tab1<-table(Predicted = pred1, Actual = train$Attrition)
+tab1
+```
+
+834 employees were predicted to not resign and actually did not
+98 employees were predicted to resign and actually resigned
+
+26 employees were predicted to resign but did not
+84 employees were predicted to not resign, but they did
+
+
+#2. Percentage Misclassification of the training data
+
+
+
+```{r}
+1-sum(diag(tab1))/sum(tab1)
+```
+That is 10.56%
+
+
+
+#Measuring Misclassification for Test Data
+```{r}
+p2 <- predict(mymodel, test, type = 'response')
+pred2 <- ifelse(p2>0.5, 1, 0)
+tab2 <- table(Predicted = pred2, Actual = test$Attrition)
+tab2
+```
+
+#3 Percentage Misclassification of the test data
+
+```{r}
+1-sum(diag(tab2))/sum(tab2)
+```
+That is 11.9%
+
+#How satisfied are the company's staff?
+
+#Environmental Satisfaction
+
+```{r}
+plot(Attrition_data_fac$EnvironmentSatisfaction)
+```
+
+
+```{r}
+median(as.numeric(Attrition_data_fac$EnvironmentSatisfaction))
+```
+
+
+
+```{r}
+mean(as.numeric(Attrition_data_fac$EnvironmentSatisfaction))
+```
+
+
+#Relationship Satisfaction
+
+```{r}
+plot(Attrition_data_fac$RelationshipSatisfaction)
+```
+
+
+
+
+
+```{r}
+median(as.numeric(Attrition_data_fac$RelationshipSatisfaction))
+```
+
+
+
+```{r}
+mean(as.numeric(Attrition_data_fac$RelationshipSatisfaction))
+```
+
+
+
+#Job Satisfaction
+```{r}
+plot(Attrition_data_fac$JobSatisfaction)
+```
+
+
+
+
+```{r}
+median(as.numeric(Attrition_data_fac$JobSatisfaction))
+```
+
+```{r}
+mean(as.numeric(Attrition_data_fac$JobSatisfaction))
+```
+Since the median (3 on 4) is greater than the mean(2.7 on 4), all three forms of employee satisfaction can be said to be left skewed.
+
+So, more than half of the company's staff can be said to experience above average (2.7) levels of job satisfaction.
+
+Thus general satisfaction levels can be said to be high
+
+
+
+
+
+
+
+
+
+
+
+
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
